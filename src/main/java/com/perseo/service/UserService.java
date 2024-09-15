@@ -24,16 +24,16 @@ public class UserService {
         return iUserRepository.save(admin);
     }
 
-    public User login(String username, String password) {
-        User user = iUserRepository.findByUsername(username);
-        if (user != null && user.getPassword().equals(password)) {
-            return user;
-        }
-        return null; 
-    }
-
     public Optional<User> findUserById(Long id) {
         return iUserRepository.findById(id);
     }
-}
 
+    public UserService(IUserRepository userRepository) {
+        this.iUserRepository = userRepository;
+    }
+
+    public User getUserByUsername(String username) {
+        return iUserRepository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("User not found with username: " + username));
+    }
+}
