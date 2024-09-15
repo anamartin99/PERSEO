@@ -1,0 +1,39 @@
+package com.perseo.service;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.perseo.model.User;
+import com.perseo.repositories.IUserRepository;
+
+import java.util.Optional;
+
+@Service
+public class UserService {
+
+    @Autowired
+    private IUserRepository iUserRepository;
+
+    public User registerUser(User user) {
+        user.setRole("USER"); 
+        return iUserRepository.save(user);
+    }
+
+    public User registerAdmin(User admin) {
+        admin.setRole("ADMIN");
+        return iUserRepository.save(admin);
+    }
+
+    public User login(String username, String password) {
+        User user = iUserRepository.findByUsername(username);
+        if (user != null && user.getPassword().equals(password)) {
+            return user;
+        }
+        return null; 
+    }
+
+    public Optional<User> findUserById(Long id) {
+        return iUserRepository.findById(id);
+    }
+}
+
